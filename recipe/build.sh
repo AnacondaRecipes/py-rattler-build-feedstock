@@ -15,4 +15,6 @@ export MATURIN_PEP517_ARGS="--no-default-features --features=native-tls"
 # cross-compiled builds.
 $PYTHON -m pip install . -vv
 
-cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+# Run from the rust crate dir so we don't hit the workspace that references
+# rust-tests (not included in the PyPI sdist).
+cd py-rattler-build/rust && cargo-bundle-licenses --format yaml --output ../../THIRDPARTY.yml
