@@ -37,7 +37,7 @@ test:
     - pip check
 
 about:
-  home: http://rattler.build/
+  home: https://rattler.build/
   license: BSD-3-Clause
   license_family: BSD
   license_file:
@@ -50,7 +50,7 @@ about:
     inspired by `conda-build` and `boa`, and the output of a regular `rattler-build`
     run is a package that can be installed using `mamba`, `rattler` or `conda`.
   dev_url: https://github.com/prefix-dev/rattler-build
-  doc_url: https://rattler.build/latest/reference/python_bindings/
+  doc_url: https://rattler.build/latest/py-rattler-build/reference/
 
 extra:
   feedstock-name: py-rattler-build
