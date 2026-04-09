@@ -23,7 +23,7 @@ requirements:
   host:
     - pip
     - python
-    - maturin >=1.2.1,<2
+    - maturin >=1.11,<2
     - openssl {{ openssl }}  # [unix]
   run:
     - python
@@ -31,13 +31,15 @@ requirements:
 test:
   imports:
     - rattler_build
+    - rattler_build._rattler_build
   requires:
     - pip
   commands:
     - pip check
+    - python -c "from rattler_build import rattler_build_version; assert rattler_build_version()"
 
 about:
-  home: https://rattler.build/
+  home: https://rattler.build
   license: BSD-3-Clause
   license_family: BSD
   license_file:
@@ -50,7 +52,7 @@ about:
     inspired by `conda-build` and `boa`, and the output of a regular `rattler-build`
     run is a package that can be installed using `mamba`, `rattler` or `conda`.
   dev_url: https://github.com/prefix-dev/rattler-build
-  doc_url: https://rattler.build/latest/py-rattler-build/reference/
+  doc_url: https://rattler.build/latest/py-rattler-build/reference
 
 extra:
   feedstock-name: py-rattler-build
