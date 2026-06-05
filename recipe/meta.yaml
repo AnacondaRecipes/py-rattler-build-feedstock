@@ -19,6 +19,8 @@ requirements:
     - {{ compiler('rust') }}
     - cargo-bundle-licenses
     - cmake
+    - clang  # [win and arm64]
+    - lld  # [win and arm64]
     - make  # [unix]
   host:
     - pip
