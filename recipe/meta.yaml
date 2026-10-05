@@ -1,13 +1,15 @@
 {% set name = "py-rattler-build" %}
-{% set version = "0.65.1" %}
+{% set version = "0.76.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-','_') }}-{{ version }}.tar.gz
-  sha256: 896468793a45747b7ac1f860196432d9d57ded413ac4aceb9e76a06431ce186f
+  # 0.76.1 is not on PyPI (latest sdist is 0.73.0). The Python crate lives in
+  # the rattler-build monorepo and path-depends on the workspace root.
+  url: https://github.com/prefix-dev/rattler-build/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 2caad9c21e3293b04ff007f883ab42f465c8e619b230baffcd2a9d88a0979071
 
 build:
   number: 0
@@ -25,10 +27,14 @@ requirements:
   host:
     - pip
     - python
-    - maturin >=1.11,<2
-    - openssl {{ openssl }}  # [unix]
+    # upstream pyproject.toml: maturin~=1.14.1
+    - maturin >=1.14.1,<1.15
+    # linux native-tls links pkgs/main openssl. osx uses rustls (no openssl).
+    - openssl {{ openssl }}  # [linux]
   run:
     - python
+    # lockstep with the CLI; 0.76.1 is not on pkgs/main yet — staging in abs.yaml
+    - rattler-build {{ version }}.*
 
 test:
   imports:
