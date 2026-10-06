@@ -7,6 +7,7 @@ set "PYTHONIOENCODING=utf-8"
 REM path too long for pixi_config subpackage, https://github.com/prefix-dev/pixi/issues/3691
 set CARGO_HOME=C:\.cargo
 md %CARGO_HOME%
+set CARGO_TARGET_DIR=C:\.ct
 
 set CARGO_PROFILE_RELEASE_STRIP=symbols
 
@@ -14,7 +15,7 @@ set CARGO_PROFILE_RELEASE_STRIP=symbols
 :: CMake ASM/ClangCL issues in BuildTools-only environments.
 if /I not "%VSCMD_ARG_TGT_ARCH%"=="arm64" (
   set AWS_LC_SYS_CMAKE_BUILDER=1
-  set "CMAKE_GENERATOR=NMake Makefiles"
+  set "CMAKE_GENERATOR=Ninja"
 )
 :: Jitter entropy module requires intrinsics headers not available in the
 :: conda build env; safe to disable on Windows where BCryptGenRandom provides

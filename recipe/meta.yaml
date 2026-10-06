@@ -24,6 +24,8 @@ requirements:
     - clang  # [win and arm64]
     - lld  # [win and arm64]
     - make  # [unix]
+    # conda-forge: Ninja instead of NMake for the aws-lc-sys cmake builder
+    - ninja-base  # [win]
   host:
     - pip
     - python
@@ -33,8 +35,6 @@ requirements:
     - openssl {{ openssl }}  # [linux]
   run:
     - python
-    # lockstep with the CLI; 0.76.1 is not on pkgs/main yet — staging in abs.yaml
-    - rattler-build {{ version }}.*
 
 test:
   imports:

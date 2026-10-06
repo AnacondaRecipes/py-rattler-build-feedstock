@@ -35,4 +35,6 @@ $PYTHON -m pip install . -vv --no-deps --no-build-isolation
 
 # Run from the rust crate dir so we don't hit the workspace that references
 # rust-tests (not included in the PyPI sdist).
-cd rust && cargo-bundle-licenses --format yaml --output ../../THIRDPARTY.yml
+cd rust
+cargo-bundle-licenses --format yaml --output THIRDPARTY.yml
+cp THIRDPARTY.yml "${SRC_DIR}/THIRDPARTY.yml"
