@@ -18,6 +18,10 @@ if /I not "%VSCMD_ARG_TGT_ARCH%"=="arm64" (
   set AWS_LC_SYS_CMAKE_BUILDER=1
   set "CMAKE_GENERATOR=NMake Makefiles"
 )
+REM Jitterentropy under NMake hits MSVC C1083 ("Cannot open compiler generated
+REM file: '': Invalid argument") on the 8.3 cargo path. Skip it; Windows uses
+REM BCryptGenRandom. Same flag as 0.65.1 (PR #6).
+set AWS_LC_SYS_NO_JITTER_ENTROPY=1
 
 REM ring on win-arm64 needs clang on PATH for assembly.
 if exist "%BUILD_PREFIX%\Library\bin\clang.exe" (
