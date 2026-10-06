@@ -5,15 +5,20 @@ set -euxo pipefail
 export CARGO_PROFILE_RELEASE_STRIP=symbols
 export CARGO_PROFILE_RELEASE_LTO=fat
 
-# aws-lc-sys jitterentropy.c must compile at -O0; conda CFLAGS inject -O2.
-# The cmake builder honors that; the default cc-rs path does not.
+# py-rattler-build 0.61+ transitively pulls in aws-lc-sys, which vendors
+# jitterentropy. jitterentropy-base.c has a hard `#error` when compiled with
+# optimizations, and the cc crate's per-file -O0 override is defeated by
+# conda's trailing -O2 in CFLAGS. See aws/aws-lc-rs builder/cc_builder.rs
+# (disable_jitter_entropy). On Unix the cmake builder honors -O0, so we use
+# that instead of skipping (linux/osx CI green on 0.76.1). Windows still skips
+# (C1083 under NMake) — see bld.bat.
 # s3/sigstore still pull aws-lc-sys even when the HTTP stack is native-tls.
 export AWS_LC_SYS_CMAKE_BUILDER=1
 
-# TLS backend matches rattler-build-feedstock#2:
+# TLS backend (rattler-build-feedstock#2):
 #   osx     rustls — native-tls uses SecureTransport, which never does TLS 1.3
 #           (conda/rattler#2749; conda-forge/py-rattler-feedstock#101).
-#   linux   native-tls + conda openssl (OPENSSL_DIR).
+#   linux   native-tls + conda openssl (OPENSSL_DIR), as before.
 if [[ "${target_platform}" == osx-* ]]; then
   export MATURIN_PEP517_ARGS="--no-default-features --features=rustls"
 else
@@ -28,5 +33,6 @@ cd py-rattler-build
 # cross-compiled builds.
 $PYTHON -m pip install . -vv --no-deps --no-build-isolation
 
-cd rust
-cargo-bundle-licenses --format yaml --output "${SRC_DIR}/THIRDPARTY.yml"
+# Run from the rust crate dir so we don't hit the workspace that references
+# rust-tests (not included in the PyPI sdist).
+cd rust && cargo-bundle-licenses --format yaml --output ../../THIRDPARTY.yml
