@@ -1,5 +1,5 @@
 {% set name = "py-rattler-build" %}
-{% set version = "0.80.2" %}
+{% set version = "0.81.0" %}
 
 package:
   name: {{ name }}
@@ -9,7 +9,7 @@ source:
   # 0.76.1 is not on PyPI (latest sdist is 0.73.0). The Python crate lives in
   # the rattler-build monorepo and path-depends on the workspace root.
   url: https://github.com/prefix-dev/rattler-build/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 752cc6c20996c7faf1af97a1e8a1c6fc8d0c1b2946e05e35c77c3a21bab880dd
+  sha256: e4796afaeabb93094dfb990c9718ddf420f96a8c468845afcbb3dd48bba1dbc8
 
 build:
   number: 0
